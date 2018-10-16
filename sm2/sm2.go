@@ -79,6 +79,14 @@ func (priv *PrivateKey) Sign(rand io.Reader, msg []byte, opts crypto.SignerOpts)
 	return asn1.Marshal(sm2Signature{r, s})
 }
 
+func (priv *PrivateKey) SignWithSm3(msg, uid []byte) ([]byte, error) {
+	r, s, err := Sm2Sign(priv, msg, uid)
+	if err != nil {
+		return nil, err
+	}
+	return asn1.Marshal(sm2Signature{r, s})
+}
+
 func (priv *PrivateKey) Decrypt(data []byte) ([]byte, error) {
 	return Decrypt(priv, data)
 }
