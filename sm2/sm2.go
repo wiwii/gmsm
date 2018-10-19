@@ -101,6 +101,16 @@ func (pub *PublicKey) Verify(msg []byte, sign []byte) bool {
 	return Verify(pub, msg, sm2Sign.R, sm2Sign.S)
 }
 
+func (pub *PublicKey) VerifyWithSm3(msg, uid []byte, sign []byte) bool {
+	var sm2Sign sm2Signature
+
+	_, err := asn1.Unmarshal(sign, &sm2Sign)
+	if err != nil {
+		return false
+	}
+	return Sm2Verify(pub, msg, uid, sm2Sign.R, sm2Sign.S)
+}
+
 func (pub *PublicKey) Encrypt(data []byte) ([]byte, error) {
 	return Encrypt(pub, data)
 }
